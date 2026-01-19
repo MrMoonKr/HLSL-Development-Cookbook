@@ -30,9 +30,12 @@ HRESULT CSceneManager::Init()
 	HRESULT hr;
 
 	// Load the models
-	V_RETURN(DXUTSetMediaSearchPath(L"..\\Media\\"));
+	/*V_RETURN(DXUTSetMediaSearchPath(L"..\\Media\\"));
 	V_RETURN( m_MeshOpaque.Create( g_pDevice, L"..\\Media\\bunny.sdkmesh" ) );
-	V_RETURN( m_MeshSphere.Create( g_pDevice, L"..\\Media\\ball.sdkmesh" ) );
+	V_RETURN( m_MeshSphere.Create( g_pDevice, L"..\\Media\\ball.sdkmesh" ) );*/
+	V_RETURN( DXUTSetMediaSearchPath( L"..\\..\\Media\\" ) );
+	V_RETURN( m_MeshOpaque.Create( g_pDevice , L"..\\..\\Media\\bunny.sdkmesh" ) );
+	V_RETURN( m_MeshSphere.Create( g_pDevice , L"..\\..\\Media\\ball.sdkmesh" ) );
 
 	// Create constant buffers
 	D3D11_BUFFER_DESC cbDesc;

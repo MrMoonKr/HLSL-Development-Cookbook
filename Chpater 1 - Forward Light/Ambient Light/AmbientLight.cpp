@@ -8,6 +8,9 @@
 #include "SDKMesh.h"
 #include "resource.h"
 
+#pragma comment(lib, "DXUT.lib")
+#pragma comment(lib, "DXUTOpt.lib")
+
 #include "SceneManager.h"
 #include "LightManager.h"
 
@@ -92,7 +95,7 @@ void VisualizeSSA(ID3D11DeviceContext* pd3dImmediateContext);
 // Entry point to the program. Initializes everything and goes into a message processing 
 // loop. Idle time is used to render the scene.
 //--------------------------------------------------------------------------------------
-int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
+int WINAPI wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow )
 {
     // Enable run-time memory check for debug builds.
 #if defined(DEBUG) | defined(_DEBUG)
