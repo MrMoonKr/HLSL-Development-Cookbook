@@ -238,7 +238,7 @@ void WINAPI DXUTSetCallbackD3D11DeviceDestroyed( LPDXUTCALLBACKD3D11DEVICEDESTRO
 //--------------------------------------------------------------------------------------
 // Initialization
 //--------------------------------------------------------------------------------------
-HRESULT WINAPI DXUTInit( bool bPar	seCommandLine = true, 
+HRESULT WINAPI DXUTInit( bool bParseCommandLine = true, 
                          bool bShowMsgBoxOnError = true, 
                          __in_opt WCHAR* strExtraCommandLineParams = NULL,
                          bool bThreadSafeDXUT = false );
