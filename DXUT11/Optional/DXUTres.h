@@ -1,9 +1,10 @@
 //----------------------------------------------------------------------------
 // File: dxutres.h
 //
-// Functions to create DXUT media from arrays in memory 
+// Functions to create DXUT media from arrays in memory
 //
-// Copyright (c) Microsoft Corp. All rights reserved.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License (MIT).
 //-----------------------------------------------------------------------------
 #pragma once
 #ifndef DXUT_RES_H

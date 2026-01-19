@@ -1,7 +1,8 @@
 //--------------------------------------------------------------------------------------
 // File: DXUTgui.h
 //
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License (MIT).
 //--------------------------------------------------------------------------------------
 #pragma once
 #ifndef DXUT_GUI_H
@@ -12,7 +13,7 @@
 
 
 //--------------------------------------------------------------------------------------
-// Defines and macros 
+// Defines and macros
 //--------------------------------------------------------------------------------------
 #define EVENT_BUTTON_CLICKED                0x0101
 #define EVENT_COMBOBOX_SELECTION_CHANGED    0x0201
@@ -108,9 +109,9 @@ public:
 
     void    Refresh();
 
-    UINT iTexture;          // Index of the texture for this Element 
+    UINT iTexture;          // Index of the texture for this Element
     UINT iFont;             // Index of the font for this Element
-    DWORD dwTextFormat;     // The format argument to DrawText 
+    DWORD dwTextFormat;     // The format argument to DrawText
 
     RECT rcTexture;         // Bounding rect of this element on the composite texture
 
@@ -704,7 +705,7 @@ protected:
     virtual void    UpdateRects();
 
     int m_ID;                 // ID number
-    DXUT_CONTROL_TYPE m_Type;  // Control type, set once in constructor  
+    DXUT_CONTROL_TYPE m_Type;  // Control type, set once in constructor
     UINT m_nHotkey;            // Virtual key code for this control's hotkey
     void* m_pUserData;         // Data associated with this control that is set by user.
 
@@ -740,7 +741,7 @@ public:
         return false;
     }
 
-    HRESULT         GetTextCopy( __out_ecount(bufferCount) LPWSTR strDest, 
+    HRESULT         GetTextCopy( __out_ecount(bufferCount) LPWSTR strDest,
                                  UINT bufferCount );
     LPCWSTR         GetText()
     {
@@ -750,7 +751,7 @@ public:
 
 
 protected:
-    WCHAR           m_strText[MAX_PATH];      // Window text  
+    WCHAR           m_strText[MAX_PATH];      // Window text
 };
 
 
@@ -1316,7 +1317,7 @@ public:
     {
         return m_Buffer.GetTextSize();
     }  // Returns text length in chars excluding NULL.
-    HRESULT         GetTextCopy(  __out_ecount(bufferCount) LPWSTR strDest, 
+    HRESULT         GetTextCopy(  __out_ecount(bufferCount) LPWSTR strDest,
                     UINT bufferCount );
     void            ClearText();
     virtual void    SetTextColor( D3DCOLOR Color )

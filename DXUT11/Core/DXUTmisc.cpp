@@ -3,7 +3,8 @@
 //
 // Shortcut macros and functions for using DX objects
 //
-// Copyright (c) Microsoft Corporation. All rights reserved
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License (MIT).
 //--------------------------------------------------------------------------------------
 #include "dxut.h"
 #include <xinput.h>
@@ -118,11 +119,11 @@ void CDXUTTimer::GetTimeValues( double* pfTime, double* pfAbsoluteTime, float* p
     m_llLastElapsedTime = qwTime.QuadPart;
 
     // Clamp the timer to non-negative values to ensure the timer is accurate.
-    // fElapsedTime can be outside this range if processor goes into a 
-    // power save mode or we somehow get shuffled to another processor.  
-    // However, the main thread should call SetThreadAffinityMask to ensure that 
-    // we don't get shuffled to another processor.  Other worker threads should NOT call 
-    // SetThreadAffinityMask, but use a shared copy of the timer data gathered from 
+    // fElapsedTime can be outside this range if processor goes into a
+    // power save mode or we somehow get shuffled to another processor.
+    // However, the main thread should call SetThreadAffinityMask to ensure that
+    // we don't get shuffled to another processor.  Other worker threads should NOT call
+    // SetThreadAffinityMask, but use a shared copy of the timer data gathered from
     // the main thread.
     if( fElapsedTime < 0.0f )
         fElapsedTime = 0.0f;
@@ -169,7 +170,7 @@ bool CDXUTTimer::IsStopped()
 }
 
 //--------------------------------------------------------------------------------------
-// Limit the current thread to one processor (the current one). This ensures that timing code 
+// Limit the current thread to one processor (the current one). This ensures that timing code
 // runs on only one processor, and will not suffer any ill effects from power management.
 // See "Game Timing and Multicore Processors" for more details
 //--------------------------------------------------------------------------------------
@@ -737,7 +738,7 @@ HRESULT WINAPI DXUT_Dynamic_D3D11CreateDevice( IDXGIAdapter* pAdapter,
 }
 
 //--------------------------------------------------------------------------------------
-// Trace a string description of a decl 
+// Trace a string description of a decl
 //--------------------------------------------------------------------------------------
 void WINAPI DXUTTraceDecl( D3DVERTEXELEMENT9 decl[MAX_FVF_DECL_SIZE] )
 {
@@ -759,7 +760,7 @@ void WINAPI DXUTTraceDecl( D3DVERTEXELEMENT9 decl[MAX_FVF_DECL_SIZE] )
     DXUTOutputDebugString( L"decl[%d]=D3DDECL_END\n", iDecl );
 }
 
-#define TRACE_ID(iD) case iD: return L#iD;
+#define TRACE_ID(iD) case iD: return L## #iD;
 
 //--------------------------------------------------------------------------------------
 WCHAR* WINAPI DXUTTraceWindowsMessage( UINT uMsg )
@@ -1111,10 +1112,9 @@ BOOL WINAPI DXUTGetMonitorInfo( HMONITOR hMonitor, LPMONITORINFO lpMonitorInfo )
         HMODULE hUser32 = GetModuleHandle( L"USER32" );
         if( hUser32 )
         {
-            OSVERSIONINFOA osvi =
-            {
-                0
-            }; osvi.dwOSVersionInfoSize = sizeof( osvi ); GetVersionExA( ( OSVERSIONINFOA* )&osvi );
+            OSVERSIONINFOA osvi = { sizeof(osvi) };
+#pragma warning(suppress : 4996)
+            GetVersionExA( ( OSVERSIONINFOA* )&osvi );
             bool bNT = ( VER_PLATFORM_WIN32_NT == osvi.dwPlatformId );
             s_pFnGetMonitorInfo = ( LPGETMONITORINFO )( bNT ? GetProcAddress( hUser32,
                                                                               "GetMonitorInfoW" ) :
@@ -1179,8 +1179,8 @@ HMONITOR WINAPI DXUTMonitorFromRect( LPCRECT lprcScreenCoords, DWORD dwFlags )
 
 
 //--------------------------------------------------------------------------------------
-// Get the desktop resolution of an adapter. This isn't the same as the current resolution 
-// from GetAdapterDisplayMode since the device might be fullscreen 
+// Get the desktop resolution of an adapter. This isn't the same as the current resolution
+// from GetAdapterDisplayMode since the device might be fullscreen
 //--------------------------------------------------------------------------------------
 void WINAPI DXUTGetDesktopResolution( UINT AdapterOrdinal, UINT* pWidth, UINT* pHeight )
 {
@@ -1221,7 +1221,7 @@ void WINAPI DXUTGetDesktopResolution( UINT AdapterOrdinal, UINT* pWidth, UINT* p
 
 
 //--------------------------------------------------------------------------------------
-// Display error msg box to help debug 
+// Display error msg box to help debug
 //--------------------------------------------------------------------------------------
 HRESULT WINAPI DXUTTrace( const CHAR* strFile, DWORD dwLine, HRESULT hr,
                           const WCHAR* strMsg, bool bPopMsgBox )
@@ -1230,7 +1230,10 @@ HRESULT WINAPI DXUTTrace( const CHAR* strFile, DWORD dwLine, HRESULT hr,
     if( bPopMsgBox && bShowMsgBoxOnError == false )
         bPopMsgBox = false;
 
-    return DXTrace( strFile, dwLine, hr, strMsg, bPopMsgBox );
+    WCHAR szFile[MAX_PATH] = {};
+    MultiByteToWideChar(CP_UTF8, 0, strFile, -1, szFile, MAX_PATH);
+
+    return DXTrace(szFile, dwLine, hr, strMsg, bPopMsgBox );
 }
 
 
@@ -1488,7 +1491,7 @@ bool DXUTReLaunchMediaCenter()
     if( GetFileAttributes( szExpandedPath ) == 0xFFFFFFFF )
         return false;
 
-    // Launch ehshell.exe 
+    // Launch ehshell.exe
     INT_PTR result = ( INT_PTR )ShellExecute( NULL, TEXT( "open" ), szExpandedPath, NULL, NULL, SW_SHOWNORMAL );
     return ( result > 32 );
 }
@@ -1591,7 +1594,7 @@ HRESULT DXUTGetGamepadState( DWORD dwPort, DXUT_GAMEPAD* pGamePad, bool bThumbst
     pGamePad->fThumbRX = pGamePad->sThumbRX / 32767.0f;
     pGamePad->fThumbRY = pGamePad->sThumbRY / 32767.0f;
 
-    // Get the boolean buttons that have been pressed since the last call. 
+    // Get the boolean buttons that have been pressed since the last call.
     // Each button is represented by one bit.
     pGamePad->wPressedButtons = ( pGamePad->wLastButtons ^ pGamePad->wButtons ) & pGamePad->wButtons;
     pGamePad->wLastButtons = pGamePad->wButtons;
@@ -1611,7 +1614,7 @@ HRESULT DXUTGetGamepadState( DWORD dwPort, DXUT_GAMEPAD* pGamePad, bool bThumbst
 
 
 //--------------------------------------------------------------------------------------
-// Don't pause the game or deactive the window without first stopping rumble otherwise 
+// Don't pause the game or deactive the window without first stopping rumble otherwise
 // the controller will continue to rumble
 //--------------------------------------------------------------------------------------
 void DXUTEnableXInput( bool bEnable )
@@ -1630,7 +1633,7 @@ void DXUTEnableXInput( bool bEnable )
 
 
 //--------------------------------------------------------------------------------------
-// Don't pause the game or deactive the window without first stopping rumble otherwise 
+// Don't pause the game or deactive the window without first stopping rumble otherwise
 // the controller will continue to rumble
 //--------------------------------------------------------------------------------------
 HRESULT DXUTStopRumbleOnAllControllers()
@@ -1732,14 +1735,14 @@ HRESULT DXUTSnapD3D9Screenshot( LPCTSTR szFileName )
 
 
 
-//-------------------------------------------------------------------------------------- 
+//--------------------------------------------------------------------------------------
 HRESULT DXUTSnapD3D11Screenshot( LPCTSTR szFileName, D3DX11_IMAGE_FILE_FORMAT iff )
 {
     IDXGISwapChain *pSwap = DXUTGetDXGISwapChain();
 
     if (!pSwap)
         return E_FAIL;
-    
+
     ID3D11Texture2D* pBackBuffer;
     HRESULT hr = pSwap->GetBuffer( 0, __uuidof( *pBackBuffer ), ( LPVOID* )&pBackBuffer );
     if (hr != S_OK)
@@ -1780,8 +1783,8 @@ HRESULT DXUTSnapD3D11Screenshot( LPCTSTR szFileName, D3DX11_IMAGE_FILE_FORMAT if
         pCompatableTexture->GetDesc(&dsc);
     }
 
-    hr = D3DX11SaveTextureToFileW(dc, pCompatableTexture, iff, szFileName); 
-        
+    hr = D3DX11SaveTextureToFileW(dc, pCompatableTexture, iff, szFileName);
+
     SAFE_RELEASE(pBackBuffer);
     SAFE_RELEASE(pCompatableTexture);
 

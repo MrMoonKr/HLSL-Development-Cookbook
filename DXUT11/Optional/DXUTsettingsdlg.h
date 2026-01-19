@@ -1,7 +1,8 @@
 //--------------------------------------------------------------------------------------
 // File: DXUTSettingsDlg.cpp
 //
-// Copyright (c) Microsoft Corporation. All rights reserved
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License (MIT).
 //--------------------------------------------------------------------------------------
 #pragma once
 #ifndef DXUT_SETTINGS_H
@@ -67,7 +68,7 @@
 
 #define TOTAL_FEATURE_LEVLES                            6
 //--------------------------------------------------------------------------------------
-// Dialog for selection of device settings 
+// Dialog for selection of device settings
 // Use DXUTGetD3DSettingsDialog() to access global instance
 // To control the contents of the dialog, use the CD3D9Enumeration class.
 //--------------------------------------------------------------------------------------

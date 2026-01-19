@@ -1,7 +1,8 @@
 //--------------------------------------------------------------------------------------
 // File: ImeUi.cpp
 //
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License (MIT).
 //--------------------------------------------------------------------------------------
 #include "dxut.h"
 #include "ImeUi.h"
@@ -395,7 +396,7 @@ protected:
     static DWORD m_dwOpenModeSinkCookie;
     static DWORD m_dwConvModeSinkCookie;
     static CUIElementSink* m_TsfSink;
-    static int m_nCandidateRefCount;	// Some IME shows multiple candidate lists but the Library doesn't support multiple candidate list. 
+    static int m_nCandidateRefCount;	// Some IME shows multiple candidate lists but the Library doesn't support multiple candidate list.
     // So track open / close events to make sure the candidate list opened last is shown.
                 CTsfUiLessMode()
                 {
@@ -714,7 +715,7 @@ static LONG WINAPI WA_ImmGetCompositionString( HIMC himc, DWORD dwIndex, LPVOID 
                     *pOut++ = *pSrc;
                     psz++;
                 }
-                // buffer overrun protection, pOut is incremented in the loop, but not part	of the 
+                // buffer overrun protection, pOut is incremented in the loop, but not part	of the
                 // loop	invariant test.	To make	the	code more readable we have a test rather than
                 // rolling this	into the for stmt.
                 if( ( DWORD )( pOut - ( char* )lpBuf ) >= dwBufLen )
@@ -810,11 +811,11 @@ static void CancelCompString( HWND hwnd, bool bUseBackSpace = true, int iNewStrL
     if( bUseBackSpace || g_bInsertMode )
         iNewStrLen = 0;
 
-    // The caller sets bUseBackSpace to false if there's possibility of sending 
+    // The caller sets bUseBackSpace to false if there's possibility of sending
     // new composition string to the app right after this function call.
-    // 
-    // If the app is in overwriting mode and new comp string is 
-    // shorter than current one, delete previous comp string 
+    //
+    // If the app is in overwriting mode and new comp string is
+    // shorter than current one, delete previous comp string
     // till it's same long as the new one. Then move caret to the beginning of comp string.
     // New comp string will overwrite old one.
     if( iNewStrLen < cc )
@@ -1147,7 +1148,7 @@ static void DrawCompositionString( bool bDrawCompAttr )
             }
             else if( g_dwIMELevel == 2 )
             {
-                // make sure enough buffer space (possible space, NUL for current line, possible DBCS, 2 more NUL) 
+                // make sure enough buffer space (possible space, NUL for current line, possible DBCS, 2 more NUL)
                 // are available in multiline composition string buffer
                 bool bWrite = ( pszMlcs - g_szMultiLineCompString <
                                 COUNTOF( g_szMultiLineCompString ) - 5 * ( 3 - sizeof( TCHAR ) ) );
@@ -1245,7 +1246,7 @@ static void DrawCandidateList()
     // If position of candidate list is not initialized yet, set it here.
     if( candX == POSITION_UNINITIALIZED )
     {
-        // CHT IME in Vista doesn't have ATTR_TARGET_CONVERTED attribute while typing, 
+        // CHT IME in Vista doesn't have ATTR_TARGET_CONVERTED attribute while typing,
         // so display the candidate list near the caret in the composition string
         if( GETLANG() == LANG_CHT && GetImeId() != 0 && g_dwCaretX != POSITION_UNINITIALIZED )
         {
@@ -1373,7 +1374,7 @@ static void DrawCandidateList()
     }
     else if( g_bVerticalCand )
     {
-        // uDigitWidth is the max width of all digits. 
+        // uDigitWidth is the max width of all digits.
         if( !g_bReadingWindow )
         {
             seperateLineX = left + dwMarginX + uDigitWidth + uSpaceWidth / 2;
@@ -1722,8 +1723,7 @@ LPARAM ImeUi_ProcessMessage( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM& lParam
                                 for( i = 0; i < g_dwCount; i++ )
                                 {
                                     UINT uLen = lstrlen(
-                                        ( LPTSTR )( ( DWORD )lpCandList + lpCandList->dwOffset[i] ) ) +
-                                        ( 3 - sizeof( TCHAR ) );
+                                        (LPTSTR)((UINT_PTR)lpCandList + lpCandList->dwOffset[i])) + (3 - sizeof(TCHAR));
                                     if( uLen + cChars > maxCandChar )
                                     {
                                         if( i > g_dwSelection )
@@ -1755,8 +1755,8 @@ LPARAM ImeUi_ProcessMessage( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM& lParam
                                  ( DWORD )i < lpCandList->dwCount && j < g_uCandPageSize;
                                  i++, j++ )
                             {
-                                ComposeCandidateLine( j,
-                                                      ( LPTSTR )( ( DWORD )lpCandList + lpCandList->dwOffset[i] ) );
+                                ComposeCandidateLine(j,
+                                    (LPTSTR)((UINT_PTR)lpCandList + lpCandList->dwOffset[i]));
                             }
                             ImeUiCallback_Free( ( HANDLE )lpCandList );
                             _ImmReleaseContext( hWnd, himc );
@@ -1820,7 +1820,7 @@ LPARAM ImeUi_ProcessMessage( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM& lParam
             }
             break;
 
-            // fix for #15386 - When Text Service Framework is installed in Win2K, Alt+Shift and Ctrl+Shift combination (to switch 
+            // fix for #15386 - When Text Service Framework is installed in Win2K, Alt+Shift and Ctrl+Shift combination (to switch
             // input locale / keyboard layout) doesn't send WM_KEYUP message for the key that is released first. We need to check
             // if these keys are actually up whenever we receive key up message for other keys.
         case WM_KEYUP:
@@ -1986,6 +1986,7 @@ bool ImeUi_Initialize( HWND hwnd, bool bDisable )
     g_disableCicero.Initialize();
 
     g_osi.dwOSVersionInfoSize = sizeof( OSVERSIONINFOA );
+#pragma warning(suppress : 4996)
     GetVersionExA( &g_osi );
 
     bool bUnicodeImm = false;
@@ -2065,7 +2066,7 @@ bool ImeUi_Initialize( HWND hwnd, bool bDisable )
 #endif
     }
 
-    // turn init flag on so that subsequent calls to ImeUi functions work. 
+    // turn init flag on so that subsequent calls to ImeUi functions work.
     g_bInitialized = true;
 
     ImeUi_SetWindow( g_hwndMain );
@@ -2155,7 +2156,7 @@ void ImeUi_Uninitialize()
 
 //
 //	GetImeId( UINT uIndex )
-//		returns 
+//		returns
 //	returned value:
 //	0: In the following cases
 //		- Non Chinese IME input locale
@@ -2196,7 +2197,7 @@ static DWORD GetImeId( UINT uIndex )
         return dwRet[uIndex];
     }
     hklPrev = kl;
-    DWORD dwLang = ( ( DWORD )kl & 0xffff );
+    DWORD dwLang = (static_cast<DWORD>(reinterpret_cast<UINT_PTR>(kl)) & 0xffff);
 
     if( g_bUILessMode && GETLANG() == LANG_CHT )
     {
@@ -2678,15 +2679,14 @@ static void CheckToggleState()
     CheckInputLocale();
 
     // In Vista, we have to use TSF since few IMM functions don't work as expected.
-    // WARNING: Because of timing, g_dwState and g_bChineseIME may not be updated 
+    // WARNING: Because of timing, g_dwState and g_bChineseIME may not be updated
     // immediately after the change on IME states by user.
     if( g_bUILessMode )
     {
         return;
     }
-
-    bool bIme = _ImmIsIME( g_hklCurrent ) != 0
-        && ( ( 0xF0000000 & ( DWORD )g_hklCurrent ) == 0xE0000000 ); // Hack to detect IME correctly. When IME is running as TIP, ImmIsIME() returns true for CHT US keyboard.
+    bool bIme = _ImmIsIME(g_hklCurrent) != 0
+        && ((0xF0000000 & static_cast<DWORD>(reinterpret_cast<UINT_PTR>(g_hklCurrent))) == 0xE0000000); // Hack to detect IME correctly. When IME is running as TIP, ImmIsIME() returns true for CHT US keyboard.
     g_bChineseIME = ( GETPRIMLANG() == LANG_CHINESE ) && bIme;
 
     HIMC himc;
@@ -3241,11 +3241,11 @@ void CTsfUiLessMode::UpdateImeState( BOOL bResetCompartmentEventSink )
 STDAPI CTsfUiLessMode::CUIElementSink::OnActivated( DWORD dwProfileType, LANGID langid, REFCLSID clsid, REFGUID catid,
                                                     REFGUID guidProfile, HKL hkl, DWORD dwFlags )
 {
-    static GUID TF_PROFILE_DAYI =
+    static GUID s_TF_PROFILE_DAYI =
     {
         0x037B2C25, 0x480C, 0x4D7F, 0xB0, 0x27, 0xD6, 0xCA, 0x6B, 0x69, 0x78, 0x8A
     };
-    g_iCandListIndexBase = IsEqualGUID( TF_PROFILE_DAYI, guidProfile ) ? 0 : 1;
+    g_iCandListIndexBase = IsEqualGUID( s_TF_PROFILE_DAYI, guidProfile ) ? 0 : 1;
     if( IsEqualIID( catid, GUID_TFCAT_TIP_KEYBOARD ) && ( dwFlags & TF_IPSINK_FLAG_ACTIVE ) )
     {
         g_bChineseIME = ( dwProfileType & TF_PROFILETYPE_INPUTPROCESSOR ) && langid == LANG_CHT;
@@ -3456,7 +3456,7 @@ BOOL CTsfUiLessMode::CurrentInputLocaleIsIme()
     return ret;
 }
 
-// Sets up or removes sink for UI element. 
+// Sets up or removes sink for UI element.
 // UI element sink should be removed when IME is disabled,
 // otherwise the sink can be triggered when a game has multiple instances of IME UI library.
 void CTsfUiLessMode::EnableUiUpdates( bool bEnable )
