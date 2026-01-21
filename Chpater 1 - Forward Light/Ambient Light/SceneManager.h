@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DXUT.h"
 #include "SDKmesh.h"
 
 class CSceneManager

@@ -38,14 +38,14 @@ HRESULT CLightManager::Init()
 {
 	HRESULT hr;
 
-	// Create constant buffers
     D3D11_BUFFER_DESC cbDesc;
-    ZeroMemory( &cbDesc, sizeof(cbDesc) );
-    cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-    cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-    cbDesc.ByteWidth = sizeof( CB_AMBIENT );
-    V_RETURN( g_pDevice->CreateBuffer( &cbDesc, NULL, &m_pAmbientLightPixelCB ) );
+    ZeroMemory( &cbDesc, sizeof( cbDesc ) );
+    cbDesc.Usage            = D3D11_USAGE_DYNAMIC;
+    cbDesc.BindFlags        = D3D11_BIND_CONSTANT_BUFFER;
+    cbDesc.CPUAccessFlags   = D3D11_CPU_ACCESS_WRITE;
+    cbDesc.ByteWidth        = sizeof( CB_AMBIENT );
+    hr = g_pDevice->CreateBuffer( &cbDesc, NULL, &m_pAmbientLightPixelCB );
+    V_RETURN( hr );
     DXUT_SetDebugName( m_pAmbientLightPixelCB, "Ambient Light CB" );
 
 	// Read the HLSL file
@@ -53,18 +53,13 @@ HRESULT CLightManager::Init()
 	V_RETURN( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, L"ForwardLight.hlsl" ) );
 
     // Compile the shaders
-	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+	DWORD dwShaderFlags     = D3DCOMPILE_ENABLE_STRICTNESS;
 #if defined( DEBUG ) || defined( _DEBUG )
-    // Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
-    // Setting this flag improves the shader debugging experience, but still allows 
-    // the shaders to be optimized and to run exactly the way they will run in 
-    // the release configuration of this program.
-    dwShaderFlags |= D3DCOMPILE_DEBUG;
+    dwShaderFlags           |= D3DCOMPILE_DEBUG;
 #endif
 
-	// Load the ambient light shaders
 	ID3DBlob* pShaderBlob = NULL;
-    V_RETURN( CompileShader(str, NULL, "RenderSceneVS", "vs_5_0", dwShaderFlags, &pShaderBlob) );
+    V_RETURN( CompileShader(str, NULL, "RenderSceneVS", "vs_5_0", dwShaderFlags, &pShaderBlob ) );
 	V_RETURN( g_pDevice->CreateVertexShader( pShaderBlob->GetBufferPointer(),
                                               pShaderBlob->GetBufferSize(), NULL, &m_pForwardLightVertexShader ) );
     DXUT_SetDebugName( m_pForwardLightVertexShader, "Forward Light VS" );
@@ -114,27 +109,24 @@ void CLightManager::DeInit()
 	SAFE_RELEASE( m_pForwardLightDS );
 }
 
-void CLightManager::ForwardSetup(ID3D11DeviceContext* pd3dImmediateContext)
+void CLightManager::ForwardSetup( ID3D11DeviceContext* pd3dImmediateContext )
 {
-	HRESULT hr;
+    HRESULT hr;
 
-	pd3dImmediateContext->OMSetDepthStencilState(m_pForwardLightDS, 0);
+    pd3dImmediateContext->OMSetDepthStencilState( m_pForwardLightDS , 0 );
 
-	// Fill the ambient values constant buffer
-	D3D11_MAPPED_SUBRESOURCE MappedResource;
-	V( pd3dImmediateContext->Map( m_pAmbientLightPixelCB, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource ) );
-    CB_AMBIENT* pAmbientValuesCB = ( CB_AMBIENT* )MappedResource.pData;
-	pAmbientValuesCB->vAmbientLower = GammaToLinear(m_vAmbientLowerColor);
-    pAmbientValuesCB->vAmbientRange = GammaToLinear(m_vAmbientUpperColor) - GammaToLinear(m_vAmbientLowerColor);
-    pd3dImmediateContext->Unmap( m_pAmbientLightPixelCB, 0 );
+    // Fill the ambient values constant buffer
+    D3D11_MAPPED_SUBRESOURCE MappedResource;
+    V( pd3dImmediateContext->Map( m_pAmbientLightPixelCB , 0 , D3D11_MAP_WRITE_DISCARD , 0 , &MappedResource ) );
+    CB_AMBIENT* pAmbientValuesCB = (CB_AMBIENT*)MappedResource.pData;
+    pAmbientValuesCB->vAmbientLower = GammaToLinear( m_vAmbientLowerColor );
+    pAmbientValuesCB->vAmbientRange = GammaToLinear( m_vAmbientUpperColor ) - GammaToLinear( m_vAmbientLowerColor );
+    pd3dImmediateContext->Unmap( m_pAmbientLightPixelCB , 0 );
 
-	// Set the ambient values as the second constant buffer
-    pd3dImmediateContext->PSSetConstantBuffers( 1, 1, &m_pAmbientLightPixelCB );
+    pd3dImmediateContext->PSSetConstantBuffers( 1 , 1 , &m_pAmbientLightPixelCB ); // set the pixel constant buffer
 
-	// Set the vertex layout
-	pd3dImmediateContext->IASetInputLayout( m_pForwardLightVSLayout );
-
-	pd3dImmediateContext->VSSetShader(m_pForwardLightVertexShader, NULL, 0);
-	pd3dImmediateContext->PSSetShader(m_pAmbientLightPixelShader, NULL, 0);
+    pd3dImmediateContext->IASetInputLayout( m_pForwardLightVSLayout ); // set the vertex layout
+    pd3dImmediateContext->VSSetShader( m_pForwardLightVertexShader , NULL , 0 ); // set the vertex shader
+    pd3dImmediateContext->PSSetShader( m_pAmbientLightPixelShader , NULL , 0 ); // set the pixel shader
 }
 

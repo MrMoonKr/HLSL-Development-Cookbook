@@ -33,16 +33,16 @@ extern ID3DXSprite*         g_pSprite9;
 ID3D11SamplerState*         g_pSampPoint = NULL;
 ID3D11SamplerState*         g_pSampLinear = NULL;
 
-ID3D11Device* g_pDevice;
+ID3D11Device*               g_pDevice;
 
 // Global systems
-CSceneManager g_SceneManager;
-CLightManager g_LightManager;
+CSceneManager               g_SceneManager;
+CLightManager               g_LightManager;
 
 // HUD values
-bool g_bShowHud = true;
-D3DXVECTOR3 g_vAmbientLowerColor = D3DXVECTOR3(0.1f, 0.5f, 0.1f);
-D3DXVECTOR3 g_vAmbientUpperColor = D3DXVECTOR3(0.1f, 0.2f, 0.5f);
+bool                        g_bShowHud = true;
+D3DXVECTOR3                 g_vAmbientLowerColor = D3DXVECTOR3(0.1f, 0.5f, 0.1f);
+D3DXVECTOR3                 g_vAmbientUpperColor = D3DXVECTOR3(0.1f, 0.2f, 0.5f);
 
 //--------------------------------------------------------------------------------------
 // UI control IDs
@@ -61,48 +61,47 @@ D3DXVECTOR3 g_vAmbientUpperColor = D3DXVECTOR3(0.1f, 0.2f, 0.5f);
 //--------------------------------------------------------------------------------------
 // Forward declarations 
 //--------------------------------------------------------------------------------------
-LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
-                          void* pUserContext );
-void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
-void CALLBACK OnMouse(bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext);
-void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
-void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
-bool CALLBACK ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
+LRESULT CALLBACK    MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, 
+                             bool* pbNoFurtherProcessing, void* pUserContext );
+void CALLBACK       OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
+void CALLBACK       OnMouse( bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext);
+void CALLBACK       OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
+void CALLBACK       OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
+bool CALLBACK       ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
 
-bool CALLBACK IsD3D9DeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat,
+bool CALLBACK       IsD3D9DeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat,
                                              bool bWindowed, void* pUserContext );
 
-bool CALLBACK IsD3D11DeviceAcceptable( const CD3D11EnumAdapterInfo *AdapterInfo, UINT Output, const CD3D11EnumDeviceInfo *DeviceInfo,
+bool CALLBACK       IsD3D11DeviceAcceptable( const CD3D11EnumAdapterInfo *AdapterInfo, UINT Output, const CD3D11EnumDeviceInfo *DeviceInfo,
                                        DXGI_FORMAT BackBufferFormat, bool bWindowed, void* pUserContext );
-HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice, const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc,
+HRESULT CALLBACK    OnD3D11CreateDevice( ID3D11Device* pd3dDevice, const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc,
                                      void* pUserContext );
-HRESULT CALLBACK OnD3D11ResizedSwapChain( ID3D11Device* pd3dDevice, IDXGISwapChain* pSwapChain,
+HRESULT CALLBACK    OnD3D11ResizedSwapChain( ID3D11Device* pd3dDevice, IDXGISwapChain* pSwapChain,
                                          const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext );
-void CALLBACK OnD3D11ReleasingSwapChain( void* pUserContext );
-void CALLBACK OnD3D11DestroyDevice( void* pUserContext );
-void CALLBACK OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext* pd3dImmediateContext, double fTime,
+void CALLBACK       OnD3D11ReleasingSwapChain( void* pUserContext );
+void CALLBACK       OnD3D11DestroyDevice( void* pUserContext );
+void CALLBACK       OnD3D11FrameRender( ID3D11Device* pd3dDevice, ID3D11DeviceContext* pd3dImmediateContext, double fTime,
                                  float fElapsedTime, void* pUserContext );
 
-void InitApp();
-void RenderText();
+void                InitApp();
+void                RenderText();
 
 // Helpers
-HRESULT CompileShader(PWCHAR strPath, D3D10_SHADER_MACRO* pMacros, char* strEntryPoint, char* strProfile, DWORD dwShaderFlags, ID3DBlob** ppVertexShaderBuffer);
-void VisualizeGBuffer(ID3D11DeviceContext* pd3dImmediateContext);
-void VisualizeSSA(ID3D11DeviceContext* pd3dImmediateContext);
+HRESULT             CompileShader(PWCHAR strPath, D3D10_SHADER_MACRO* pMacros, char* strEntryPoint, char* strProfile, DWORD dwShaderFlags, ID3DBlob** ppVertexShaderBuffer);
+void                VisualizeGBuffer(ID3D11DeviceContext* pd3dImmediateContext);
+void                VisualizeSSA(ID3D11DeviceContext* pd3dImmediateContext);
 
-//--------------------------------------------------------------------------------------
-// Entry point to the program. Initializes everything and goes into a message processing 
-// loop. Idle time is used to render the scene.
-//--------------------------------------------------------------------------------------
+
+/// <summary>
+/// 프로그램 진입점 함수
+/// </summary>
 int WINAPI wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow )
 {
-    // Enable run-time memory check for debug builds.
-#if defined(DEBUG) | defined(_DEBUG)
+#if defined( DEBUG ) | defined( _DEBUG )
     _CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
 
-    // DXUT will create and use the best device (either D3D9 or D3D11) 
+    // DXUT will create and use the best device ( either D3D9 or D3D11 ) 
     // that is available on the system depending on which D3D callbacks are set below
 
     // Set DXUT callbacks
@@ -136,10 +135,9 @@ int WINAPI wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     return DXUTGetExitCode();
 }
 
-
-//--------------------------------------------------------------------------------------
-// Initialize the app 
-//--------------------------------------------------------------------------------------
+/// <summary>
+/// 앱 초기화
+/// </summary>
 void InitApp()
 {
     g_SettingsDlg.Init( &g_DialogResourceManager );
@@ -216,7 +214,11 @@ HRESULT CALLBACK OnD3D11CreateDevice( ID3D11Device* pd3dDevice, const DXGI_SURFA
 	g_pDevice = pd3dDevice;
 
 	V_RETURN(DXUTSetMediaSearchPath(L"..\\Media\\"));
+    V_RETURN( DXUTSetMediaSearchPath( L"..\\..\\Media\\" ) );
+
+    ID3D11Device* pDevice = DXUTGetD3D11Device();
     ID3D11DeviceContext* pd3dImmediateContext = DXUTGetD3D11DeviceContext();
+
     V_RETURN( g_DialogResourceManager.OnD3D11CreateDevice( pd3dDevice, pd3dImmediateContext ) );
     V_RETURN( g_SettingsDlg.OnD3D11CreateDevice( pd3dDevice ) );
     g_pTxtHelper = new CDXUTTextHelper( pd3dDevice, pd3dImmediateContext, &g_DialogResourceManager, 15 );
@@ -401,18 +403,18 @@ void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext 
     g_Camera.FrameMove( fElapsedTime );
 
 	// Pass HUD values to the systems
-	g_LightManager.SetAmbient(g_vAmbientLowerColor, g_vAmbientUpperColor);
+	g_LightManager.SetAmbient( g_vAmbientLowerColor, g_vAmbientUpperColor );
 }
 
 //--------------------------------------------------------------------------------------
 // Handle messages to the application
 //--------------------------------------------------------------------------------------
-LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
-                          void* pUserContext )
+LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, 
+    bool* pbNoFurtherProcessing, void* pUserContext )
 {
     // Pass messages to dialog resource manager calls so GUI state is updated correctly
     *pbNoFurtherProcessing = g_DialogResourceManager.MsgProc( hWnd, uMsg, wParam, lParam );
-    if( *pbNoFurtherProcessing )
+    if ( *pbNoFurtherProcessing )
         return 0;
 
     // Pass messages to settings dialog if its active
@@ -447,7 +449,7 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 //--------------------------------------------------------------------------------------
 // Handle mouse
 //--------------------------------------------------------------------------------------
-void CALLBACK OnMouse(bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext)
+void CALLBACK OnMouse( bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext)
 {
 }
 
@@ -459,7 +461,7 @@ void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, v
 	int iRangeMin = 0;
 	int iRangeMax = 0;
 	float fNormVal = -1.0f;
-	if(pControl->GetType() == DXUT_CONTROL_SLIDER)
+	if ( pControl->GetType() == DXUT_CONTROL_SLIDER )
 	{
 		((CDXUTSlider*)pControl)->GetRange(iRangeMin, iRangeMax);
 		int iCurVal = ((CDXUTSlider*)pControl)->GetValue();
@@ -501,12 +503,14 @@ void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, v
     }
 }
 
-HRESULT CompileShader(PWCHAR strPath, D3D10_SHADER_MACRO* pMacros, char* strEntryPoint, char* strProfile, DWORD dwShaderFlags, ID3DBlob** ppVertexShaderBuffer)
+HRESULT CompileShader( PWCHAR strPath, D3D10_SHADER_MACRO* pMacros, char* strEntryPoint, char* strProfile, DWORD dwShaderFlags, ID3DBlob** ppVertexShaderBuffer )
 {
 	HRESULT hr;
 	ID3DBlob* pErrorBlob;
-	if( FAILED(hr = D3DX11CompileFromFile( strPath, pMacros, NULL, strEntryPoint, strProfile, dwShaderFlags, 0, NULL,
-		ppVertexShaderBuffer, &pErrorBlob, NULL ) ) )
+	hr = D3DX11CompileFromFile( strPath, pMacros, NULL, strEntryPoint, strProfile, dwShaderFlags, 0, NULL,
+		ppVertexShaderBuffer, &pErrorBlob, NULL );
+
+    if ( FAILED( hr ) )
 	{
 		int buffSize = pErrorBlob->GetBufferSize() + 1;
 		LPWSTR gah = new wchar_t[buffSize];

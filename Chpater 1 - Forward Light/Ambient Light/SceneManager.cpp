@@ -1,11 +1,11 @@
-#include "DXUT.h"
 #include "SceneManager.h"
+
 #include "LightManager.h"
 #include "SDKmisc.h"
 #include "DXUTCamera.h"
 
-extern ID3D11Device* g_pDevice;
-extern CFirstPersonCamera g_Camera;
+extern ID3D11Device*		g_pDevice;
+extern CFirstPersonCamera	g_Camera;
 
 #pragma pack(push,1)
 struct CB_VS_PER_OBJECT
