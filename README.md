@@ -1,3 +1,61 @@
+# HLSL Development Cookbook Source Codes
+
+WIP ( Work in Progress )  
+
+- 레거시 프로젝트 위한 DirectX 11 직무 교육( OJT, On the job Training )을 위해서 생성 하였습니다.  
+- Visual Studio 2022 Community  
+- DirectX SDK ( June 2010 )
+
+
+## 책 관련 링크  
+
+<img src="https://content.packt.com/_/image/original/B01100/cover_image.jpg" alt="" height="256px" align="right">
+
+- [HLSL Development Cookbook [ 원서 ]](https://www.packtpub.com/en-us/product/hlsl-development-cookbook-9781849694209)  
+
+- [HLSL 프로그래밍 [ 번역서 ]](http://acornpub.co.kr/book/hlsl-cookbook)  
+
+
+## 개발 및 테스트 환경  
+
+- 시스템 ( Computer System )  
+
+  - AMD Ryzen 9 7900X 12-Core Processor
+  - 32G RAM
+  - NVIDIA Geforce RTX 3060 12GB
+  - SSD 2TB
+  - Windows 11 64bit Korean
+
+- 컴파일러 및 링커 ( Compiler , Linker )  
+
+  - [Visual Studio Community 2022](https://visualstudio.microsoft.com/ko/free-developer-offers/)  
+    - C++를 사용한 데스크톱 개발  
+    - C++를 사용한 게임 개발  ( DirectX SDK 포함되어 있음 )
+
+
+## 사용된 패키지 목록
+
+- DirectX SDK ( June 2010 )  
+  - https://www.microsoft.com/en-us/download/details.aspx?id=6812
+  - [DXSDK_Jun10.exe](https://download.microsoft.com/download/a/e/7/ae743f1f-632b-4809-87a9-aa1bb3458e31/DXSDK_Jun10.exe)  
+
+- DXUT11  
+  - https://github.com/microsoft/DirectX-SDK-Samples/tree/main/C%2B%2B/DXUT11  
+
+
+## ...
+
+- ...
+
+- ...
+
+
+
+---
+---
+---
+
+
 # HLSL-Development-Cookbook
 http://www.acornpub.co.kr/book/hlsl-cookbook 에서 다운로드 받은 HLSL Development Cookbook 도서의 소스 코드를 VC++ 2008 에서 빌드할 수 있도록 수정하는 프로젝트입니다.
 
